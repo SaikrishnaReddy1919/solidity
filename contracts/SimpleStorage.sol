@@ -21,7 +21,7 @@ pragma solidity >=0.7.0 <0.9.0;
             the state of the blockchain.
             -> EX : trasferring ether between two accounts results in changing the value of the accounts balance
 
-        2. function that dont create a transaction.
+        2. function that dont create a transaction. (declared with 'view' or 'pure')
             -> these functions dont change the value of the state variables and these do not change the
             state of the blockchain.
             -> EX : a function that returns the value of a state variable.
