@@ -54,7 +54,7 @@ contract ViewPure {
         return 1;
     }
     function viewFunction() public view returns (uint) {
-        return x + nonViewFunction();
+        return 1 + nonViewFunction();
     }
 
 
