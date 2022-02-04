@@ -91,6 +91,4 @@ contract Functions {
         return (x, isOwner, y, _a, _c);
     }
 
-
-    
 }
