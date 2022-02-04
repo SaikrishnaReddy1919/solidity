@@ -26,3 +26,34 @@ contract C is A {
         return 'Am Contract A';
     }
 }
+
+
+
+
+// <------ Passing params to parent constructor-------->
+
+contract D {
+    string public name;
+    constructor(string memory _name) {
+        name = _name;
+    }
+}
+
+// There are three ways to pass name param to parent constructor.
+// Way : 1
+
+contract E is D("krishna"){
+
+}
+// deploy above E contract and see the value of 'name'
+
+// Way 2 : 
+contract F is D {
+    constructor() D("krishna") {}
+}
+// Way 3 : Pass the name to childs constructor while deploying to set the value to parent constructor.
+contract G is D {
+    constructor(string memory _name) D(_name){}
+}
+
+
