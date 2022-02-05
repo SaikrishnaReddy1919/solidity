@@ -46,3 +46,23 @@ contract E {
 contract F is D, E {
     // has both bar() and eBar()
 }
+
+
+
+
+// <-----------calling parent contract function ----------->
+
+contract AA {
+    event Log(string message);
+
+    function foo() virtual public {
+        emit Log("AA.foo called");
+    }
+}
+
+contract BB is AA {
+    function foo() override public {
+        emit Log("BB.foo called");
+        AA.foo();
+    }
+}
