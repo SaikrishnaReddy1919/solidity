@@ -46,7 +46,7 @@ contract Error {
         // revert is same as require but it accepts one argument which is a message and uses if.
         // the only diff is, with require we write the condition what we need to satisfy and with
         // the revert we write condition saying what is this conditions mets.
-        if(balance <= _amount){
+        if(balance < _amount){
             revert("underflow");
         }
         uint oldBalance = balance;
