@@ -66,3 +66,6 @@ contract BB is AA {
         AA.foo();
     }
 }
+
+
+
