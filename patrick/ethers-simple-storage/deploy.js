@@ -24,6 +24,8 @@ async function main() {
   console.log('Deploying, please wait...')
   const contract = await contractFactory.deploy()
   const transactionReceipt = await contract.deployTransaction.wait(1)
+  // when RPC_URL(alchemy's rinkby) and private key(metamask key) changed in .env -> deployes to rinkby testnet
+  console.log(`Contract Address : ${contract.address}`)
 
   // contract.deployTransaction -> transaction response
   // transactionReceipt -> txn receipt when waited for block/txn confirmation.
