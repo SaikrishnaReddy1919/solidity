@@ -4,10 +4,18 @@ require('dotenv').config()
 
 async function main() {
   const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL)
-  const wallet = new ethers.Wallet(
-    process.env.PRIVATE_KEY,
-    provider,
-  )
+  //-----------  when loaded wallet from private key  -----------
+  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider)
+  // --------  Private key - END -----------
+
+  //-----------   when loaded wallet from encrypted key (comment above private key part if you want to use this.)   ----------
+  //   const encryptedJson = fs.readFileSync('./.encryptedKey.json', 'utf8')
+  //   let wallet = new ethers.Wallet.fromEncryptedJsonSync(
+  //     encryptedJson,
+  //     process.env.PRIVATE_KEY_PASSWORD,
+  //   )
+  //   wallet = await wallet.connect(provider)
+  //------------   encrypted key - END    -------------
 
   const abi = fs.readFileSync('./SimpleStorage_sol_SimpleStorage.abi', 'utf8')
   const bin = fs.readFileSync('./SimpleStorage_sol_SimpleStorage.bin', 'utf8')
@@ -43,7 +51,7 @@ async function main() {
 
   const currentFavouriteNumber = await contract.retrieve()
   console.log(`Current Fav Number : ${currentFavouriteNumber.toString()}`)
-  const txnResponse = await contract.store("1000")
+  const txnResponse = await contract.store('1000')
   const txnReceipt = await txnResponse.wait(1)
   const updatedFavNumber = await contract.retrieve()
   console.log(`Updated Fav Number : ${updatedFavNumber.toString()}`)
