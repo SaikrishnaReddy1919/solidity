@@ -11,19 +11,20 @@ contract FundMe {
 
     using PriceConverter for uint256;
 
-    uint256 public minimumUSD = 50 * 1e18; // usd with 18 decimals
+    uint256 public constant MINIMUM_USD = 50 * 1e18; // usd with 18 decimals
     address[] public funders;
     mapping(address => uint256) public addressToAmountFounded;
-    address public owner;
+    address public immutable i_owner;
 
     constructor() {
-        owner = msg.sender;
+        i_owner = msg.sender;
     }
 
     function fund() public payable {
         //set min fund amount
         // require(getConversionRate(msg.value) >= minimumUSD , "didn't send enough funds!"); //1e18 = 1 * 10 **18 == 1000000000000000000 -> use without library
-        require(msg.value.getConversionRate() >= minimumUSD, "didn't send enough funds!.");
+        require(msg.value.getConversionRate() >= MINIMUM_USD, "didn't send enough funds!.");
+
         funders.push(msg.sender); // push sender to funded array.
         addressToAmountFounded[msg.sender] = msg.value; // keeps track of how much amount sent for each address.
     }
@@ -53,7 +54,18 @@ contract FundMe {
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner is allowed to call this.");
+        require(msg.sender == i_owner, "Only owner is allowed to call this.");
         _;
+    }
+
+    //what happens if someone sends eth to this contract without calling fund function?
+    //ex: direclty sending eth to the contract address - then fund() will not be executed so
+    // solidity has some special functions like recieve and fallback - these are executed when funds are sent to the contract directly.
+
+    receive() external payable{
+        fund();
+    }
+    fallback() external payable {
+        fund();
     }
 }
