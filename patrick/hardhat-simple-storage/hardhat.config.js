@@ -21,6 +21,13 @@ module.exports = {
             accounts: [GOERLI_PRIVATE_KEY],
             chainId: 5,
         },
+        // to deploy on localhost : yarn hardhat run scripts/deploy.js --network localhost
+        localhost: {
+            // this is not same as default hardhat network.
+            url: "http://127.0.0.1:8545/",
+            //accounts -> hardhat picks automatically
+            chainId: 31337,
+        },
     },
     solidity: "0.8.17",
     etherscan: {
