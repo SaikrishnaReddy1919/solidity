@@ -2,6 +2,7 @@ require("@nomicfoundation/hardhat-toolbox")
 require("dotenv").config()
 require("@nomiclabs/hardhat-etherscan")
 require("./tasks/block-number")
+require("hardhat-gas-reporter")
 
 /** @type import('hardhat/config').HardhatUserConfig */
 const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL
@@ -32,5 +33,14 @@ module.exports = {
     solidity: "0.8.17",
     etherscan: {
         apiKey: ETHERSCAN_API_KEY,
+    },
+    gasReporter: {
+        enabled: true, // if false -> dont generate report for gas
+        outputFile: "gas-report.txt",
+        noColors: true,
+        currency: "USD",
+        // TODO: load api key (get it from website and load here)
+        // coinmarketcap: COINMARKETCAP_API_KEY, // -> to get prices of eth
+        // token: "MATIC", //-> if deployed on polygon chain
     },
 }
