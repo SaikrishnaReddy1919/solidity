@@ -15,6 +15,7 @@ async function main() {
 
     console.log("Deploying, please wait....")
     //--------- Deploying Contract ---------
+    //TODO: deploy
     const simpleStorage = await SimpleStorageFactory.deploy()
     await simpleStorage.deployed()
 
@@ -22,7 +23,7 @@ async function main() {
     // console.log("---------Network Info :----------")
     // console.log(network.config)
 
-    //--------- programmatically verify contract on etherscan ---------
+    //-------- programmatically verify contract on etherscan ---------
     if (network.config.chainId === 5 && process.env.ETHERSCAN_API_KEY) {
         console.log("Waiting for blocks(6) confirmations...")
         await simpleStorage.deployTransaction.wait(6) // wait for 6 blocks
@@ -40,6 +41,7 @@ async function main() {
     console.log(`Updated value is : ${updatedValue}`)
 }
 
+//TODO: -- programmatic verification on etherscan
 async function verify(contractAddress, args) {
     //args -> if contract has any args in constructor
     console.log("Verifying contract...")
