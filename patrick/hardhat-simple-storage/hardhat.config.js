@@ -6,10 +6,10 @@ require("hardhat-gas-reporter")
 require("solidity-coverage")
 
 /** @type import('hardhat/config').HardhatUserConfig */
-const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL
-const GOERLI_PRIVATE_KEY = process.env.GOERLI_PRIVATE_KEY
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
-const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY
+const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL || "0x11ee3108a03081fe260ecdc106554d09d9d1209bcafd46942b10e02943effc4a"
+const GOERLI_PRIVATE_KEY = process.env.GOERLI_PRIVATE_KEY || "https://eth-mainnet.alchemyapi.io/v2/your-api-key"
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || ""
+const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || ""
 
 
 module.exports = {
@@ -42,7 +42,6 @@ module.exports = {
         outputFile: "gas-report.txt",
         noColors: true,
         currency: "USD",
-        // TODO: load api key (get it from website and load here)
         coinmarketcap: COINMARKETCAP_API_KEY, // -> to get prices of eth
         // token: "MATIC", //-> if deployed on polygon chain
     },

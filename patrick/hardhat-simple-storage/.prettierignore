@@ -3,7 +3,7 @@ package.json
 img
 artifacts
 cache
-civerage
+coverage
 .env
 .*
 README.md
