@@ -35,6 +35,16 @@ async function main() {
 
     //check user data again
     await getBorrowUserData(lendingPool, deployer)
+    await repay(amountDaiToBorrowWei, daiTokenAddress, lendingPool, deployer)
+    await getBorrowUserData(lendingPool, deployer)
+}
+
+async function repay(amount, daiAddress, lendingPool, account) {
+    //approve -> sending dai back to the contract
+    await approveERC20(daiAddress, lendingPool.address, amount, account)
+    const repayTx = await lendingPool.repay(daiAddress, amount, 1, account)
+    await repayTx.wait(1)
+    console.log("repayed!")
 }
 
 async function borrowDai(daiAddress, lendingPool, amountDaiToBorrowWei, account) {
