@@ -23,7 +23,18 @@ async function main() {
 
     //borrow
     //we must know -> how much we have borrwed, how much in collateral, how much we can borrow
+    //if we want to borrow Dai -> what's the conversion rate on DAI vs availableBorrowsETH
     let { availableBorrowsETH, totalDebtETH } = await getBorrowUserData(lendingPool, deployer)
+    const daiPrice = await getDaiPrice()
+}
+async function getDaiPrice() {
+    const daiEthProceFeed = await ethers.getContractAt(
+        "AggregatorV3Interface",
+        "0x773616E4d11A78F511299002da57A0a94577F1f4" //dont need signer as we are reading
+    )
+    const price = (await daiEthProceFeed.latestRoundData())[1]
+    console.log(`The DAI/ETH price is : ${price.toString()}`)
+    return price
 }
 
 async function getBorrowUserData(lendingPool, account) {
