@@ -6,21 +6,21 @@ pragma solidity ^0.8.7;
 //Destructuring assignment
 contract SomeAdvanced {
 
-    function output() public pure returns (address, int) {
-        return (address(this), 10)
+    function output() public view returns (address, int) {
+        return (address(this), 10);
     }
 
-    function named_output() public pure returns (address me, int age) {
-        return (address(this), 10)
+    function named_output() public view returns (address me, int age) {
+        return (address(this), 10);
     }
 
-    function assigned() public pure returns (address me, int age) {
+    function assigned() public view returns (address me, int age) {
         me = address(this);
         age = 10;
     }
 
-    function destructure() public pure {
-        (address myAdd, uint256 age) = assigned();
+    function destructure() public view {
+        (address myAdd, int256 age) = assigned();
     }
 
     //arrays
@@ -35,7 +35,7 @@ contract SomeAdvanced {
         nums[2] = 22; // [1, 2, 22, 4]
 
         delete nums[1]; // [1, 0, 22, 4] -> ***** delete replaces the number with 0. Length will be same . To remove completly see below.
-        num.pop(); //[1, 0, 22]
+        nums.pop(); //[1, 0, 22]
         uint len = nums.length;
 
         //create array in memory
@@ -91,5 +91,19 @@ contract SomeAdvanced {
     }
     function returnarr() public view returns(uint[] memory) {
         return demo_arr;
+    }
+
+
+    //mappings
+    mapping(address => uint) public balances;
+    mapping(address => mapping(address => bool)) public isFriend;
+
+    function mapping_demo() public {
+        balances[msg.sender] = 100;
+
+        uint bal_of_unset_address = balances[address(1)]; //0
+
+        delete balances[msg.sender]; //0
+        isFriend[msg.sender][address(this)] = true;
     }
 }
