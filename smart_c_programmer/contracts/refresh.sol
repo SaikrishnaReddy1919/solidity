@@ -41,10 +41,10 @@ contract RefreshSolidity {
      */
 
     //------------------------------------//
-    //--->         VISIBILITY         <---//
+    //--->    Function VISIBILITY     <---//
     //------------------------------------//
     /**
-     * Trick : order for using function visibily is : private > internal > external > public.
+     * Trick(Least previlage principle) : order for using function visibily is : private > internal > external > public.
      *      - first use private, then see if contracts works, if not then use internal.
      *      - if internal dont works, then use external.
      *      - if external also wont work, then use public as the last option.
@@ -106,6 +106,179 @@ contract RefreshSolidity {
 
     function doTrickPublic(uint256 _amount) public {
         _increaseBalancPublic(_amount); //this line throws an error. uncomment and see.
+    }
+
+    //------------------------------------//
+    //--->    Variable VISIBILITY     <---//
+    //------------------------------------//
+    //?Trick(Least previlage principle)
+    /**
+     * private :
+     *      - can only be read from within the contract.
+     *      - and also it is not entirely true. As blockchains are public, these variables can be read by using some tools like Mythil. So, do not keep anything which is imp in a private variable. (//TODO : do some indepth stuff about this.)
+     */
+    uint private va;
+    //same as function internal keyword
+    uint internal inte;
+    //same as public for func. default. sol creates getter function for all public variables.
+    uint public pub;
+
+    //------------------------------------//
+    //--->  Some BUILT-IN Variables   <---//
+    //------------------------------------//
+
+    /**
+     * 1. Transaction
+     *      -  tx.origin - ethereum address that sends a txn.
+     * 2. msg - gives info about calling environment of the function.
+     *      - msg.value - amount of eth that was sent to SC. (in units : wei)
+     *      - msg.sender : eth address that calls the txn
+     *
+     * 3. block
+     *      - block.timestamp / now -> in seconds
+     */
+
+    /**
+     * Diff b/w tx.origin and msg.sender
+     *
+     * Let's take two smart contracts A and B. Say, Alice calls a function X() which is in contract A and inside this, function X() calls another function Y() in contract B.
+     *
+     * Now inside function X() - Contract A :
+     *      tx.origin  -> Alice. (as Alice made a call)
+     *      msg.sender -> Alice.
+     *
+     * Inside function Y() - Contract B :
+     *      tx.origin  -> Alice. (as Alice was the one who originated the txn)
+     *      msg.sender -> Contract A. (as Contract A made a call to function Y())
+     */
+
+    //------------------------------------//
+    //--->           ARRAYS           <---//
+    //------------------------------------//
+
+    /**
+     * Only same type.
+     * Two types :
+     *      1. storage arrays   - stored inside the blockchain.
+     *      2. memory arrays    - temporary. while executing function. after that it will disappear
+     */
+
+    //Storage array.
+    //type followed by name.
+    uint[] myArray; //dynamic as we did declare the size. uint[5] myArray;(fixed)
+
+    //crud
+    function operationsOnArray() external {
+        //create
+        myArray.push(2);
+        myArray.push(3);
+
+        //read
+        uint number = myArray[0];
+
+        //update
+        myArray[0] = 100;
+
+        //delete => it replaces the value at index 0 to its default type value. So length will be same.after
+        delete myArray[0];
+
+        uint counter = 0;
+        //iterate
+        for (uint i = 0; i < myArray.length; i++) {
+            counter += myArray[i];
+        }
+    }
+
+    //Memory arrays - not saved inside a blockchain.
+    function memoryArray() external pure {
+        //there is no dynamic arrays in memory arrays.
+        uint[] memory memArray = new uint[](5);
+
+        //push is not allowed as size is fixed.
+        //remaining all ops are same as dynamic arrays.
+    }
+
+    //accept and return array
+    //TODO: research
+    function foo(uint[] memory myArr) internal view returns (uint[] memory) {}
+
+    //------------------------------------//
+    //--->          MAPPINGS          <---//
+    //------------------------------------//
+    /**
+     *Default values :
+            - Every keys are accessible even the keys do not exist.
+            - So for the key which doesn't exist, we will get default value. (see below)
+     */
+
+    //declare
+    mapping(address => uint256) balances;
+
+    //nested
+    //Ex: ERC20...approve to spend coin on behalf.
+    mapping(address => mapping(address => bool)) approved;
+
+    //array inside mapping
+    mapping(address => uint[]) scores;
+
+    function fooMapping(address spender) external {
+        //add
+        balances[msg.sender] = 100;
+        //read
+        uint256 userBal = balances[msg.sender];
+        //update
+        balances[msg.sender] = 200;
+        //delete
+        delete balances[msg.sender];
+
+        //Default values :
+        // balances[some_address] => will give 0. as return value type is uint. if return value type is bool then will get false.(as false is the default for bool.)
+
+        //Nested mappings
+        approved[msg.sender][spender] = true; //set
+        bool isApproved = approved[msg.sender][spender]; //read
+        approved[msg.sender][spender] = false; //update
+        delete approved[msg.sender][spender];
+
+        //array inside mapping
+        scores[msg.sender].push(100);
+        scores[msg.sender].push(200);
+
+        scores[msg.sender][0]; //read
+        scores[msg.sender][0] = 500; //update
+        delete scores[msg.sender][0]; //delete
+    }
+
+    //------------------------------------//
+    //--->          STRUCTS           <---//
+    //------------------------------------//
+
+    //when ? if you think you are using too many variables then think about using struct.
+    struct User {
+        address addr;
+        uint score;
+        string name;
+    }
+
+    //structs itself cannot be stored in storage so they need containers ...arrays || mappings
+    User[] usersList;
+
+    //struct inside mapping
+    mapping(address => User) userDetails;
+
+    function fooStruct(string calldata _name) external {
+        //way-1
+        User memory user1 = User(msg.sender, 0, _name);
+
+        //way-2
+        User memory user2 = User({name: _name, score: 0, addr: msg.sender});
+
+        user2.addr; //read
+        user2.score = 100; //update
+        delete user1; //deletes user1 from memory
+
+        usersList.push(user2); //array
+        userDetails[msg.sender] = user2;
     }
 }
 
