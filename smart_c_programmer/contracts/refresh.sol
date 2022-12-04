@@ -280,6 +280,114 @@ contract RefreshSolidity {
         usersList.push(user2); //array
         userDetails[msg.sender] = user2;
     }
+
+    //------------------------------------//
+    //--->           ENUMS            <---//
+    //------------------------------------//
+
+    enum STATE {
+        INACTIVE,
+        ACTIVE,
+        CANCELLED
+    }
+    STATE state;
+
+    function fooEnums() external {
+        state = STATE.ACTIVE;
+    }
+
+    function fooMe() external {
+        if (state == STATE.ACTIVE) {
+            //do something
+        }
+    }
+
+    //from outside its not possible to pass states so instead we can pass integers.
+    //ex : if we pass 0, it means INACTIVE. If we pass 1, it means ACTIVE.
+
+    function enumAsArg(STATE _state) external {}
+
+    struct User5 {
+        STATE state;
+    }
+
+    //------------------------------------//
+    //--->       MEMROY Locations     <---//
+    //------------------------------------//
+    // storage, memory, stack, calldata
+
+    /**
+     * storage :
+     *      - inside the blockchain.
+     *      - all state variables has memory location as storage. (default)(all outside functions variables)
+     *
+     * memory :
+     *      - not stored on blockchain
+     *      - so tempararoy and not persistent
+     *      - only accessbile during the execution of the function after that memory data will be destoryed.
+     *
+     * stack :
+     *      - not stored on chain
+     *      - all the variables declared inside the function has stack as a storage.
+     *      - has the lifetime as same as the functions.
+     *
+     * calldata :
+     *      - not stored on chain
+     *      - has lifetime as same as the functioms.
+     *      - when called these with complex types as inputs like array and if the function is external or public then storage location must be 'calldata'
+     *
+     * TODO : do more research on this.
+     */
+
+    //-----------------storage---------------------
+    struct UserDemo {
+        string name;
+    }
+    UserDemo[] usersDe;
+
+    function fooUsers() external {
+        UserDemo storage userA = usersDe[1];
+    }
+
+    //-----------------memory----------------------
+    function fooMem() internal {
+        UserDemo memory _user = usersDe[0];
+
+        //this line only changes the name for the execution of this function only. It wont change inside the storage value.
+        _user.name = "ELon";
+        fooMemA(_user);
+    }
+
+    function fooMemA(UserDemo memory _user) internal {}
+
+    //-----------------stack----------------------
+    function fooStack() external {
+        uint b;
+    }
+
+    //-----------------calldata----------------------
+    function fooCallData(uint[] calldata scoresList) external {}
+
+    //------------------------------------//
+    //--->            Events          <---//
+    //------------------------------------//
+
+    /**
+     * if you want filter events then use 'indexed' keywords to the fields inside the event for which you want to filter by.💡
+     * max 3 'indexed' keywords can be used.💰
+     * more expensive if used 'indexed' - extra work indexing.
+     *
+     * events emitted cannot be accessed from within in the contract.😆
+     *
+     * As events are not stored using storage varible, these uses lower gas compared to stroage variables. So use events, if you dont want to store variables inside smart contract.
+     * TODO : DO OR.
+     */
+
+    event NewTrade(uint date, address from, address to, uint amount);
+
+    function trade(address to, uint amount) external {
+        emit NewTrade(block.timestamp, msg.sender, to, amount);
+    }
 }
 
 contract Inherited is RefreshSolidity {
