@@ -105,7 +105,7 @@ contract RefreshSolidity {
     }
 
     function doTrickPublic(uint256 _amount) public {
-        _increaseBalancPublic(_amount); //this line throws an error. uncomment and see.
+        _increaseBalancPublic(_amount); 
     }
 
     //------------------------------------//
