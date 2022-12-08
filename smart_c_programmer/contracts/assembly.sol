@@ -27,7 +27,7 @@ contract Assembly {
 
     //detect if address is smart contract or not
     //TODO: snippet
-    function isSmartContract(address _address) external view returns (bool) {
+    function isSmartContract(address _address) external view returns (bool) { 
         uint size;
         assembly {
             size := extcodesize(_address)
