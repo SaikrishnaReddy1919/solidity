@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: SEE LICENSE IN LICENSE
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
 contract Utils {
@@ -24,6 +24,7 @@ contract Utils {
 
 contract A {
     uint public amountA = 10;
+
     function foo(uint arg) external {
         amountA += arg;
     }
@@ -31,8 +32,9 @@ contract A {
 
 contract B {
     uint public amountB = 10;
+
     function bar(uint arg) external {
         amountB += arg;
-        revert('failed at B');
+        revert("failed at B");
     }
 }
