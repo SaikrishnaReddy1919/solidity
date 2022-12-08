@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
+//snippet - 'solidity-tips'
+
 contract Utils {
     address public addrA;
     address public addrB;

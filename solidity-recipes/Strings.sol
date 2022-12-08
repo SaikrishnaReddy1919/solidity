@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
+//simple blog - Solidity string manipulation
+
 //NOTE : string manipulation is expensive, so dont do any of these.
 contract Strings {
 
